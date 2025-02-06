@@ -17,6 +17,14 @@
 1. 必须为 GitHub 开源社区用户，不仅限于程序员，也欢迎运营、设计师、学生准程序员等等对开源和计算机感兴趣的人。
 2. 乐于分享：每个人都是有故事的人，如果你不善言辞，没关系，我们会协助每个小伙伴整理自己的经历、创意项目，举办分享会。
 
+## 免费
+
+根据开源贡献计算，采用 GitHub Achievements（成就）徽章数量，每 1 个徽章可免费住 1 天，欢迎在 [issue](https://github.com/1024house/1024house/issues/6) 共创探讨。
+
+比如下图的用户有 4 个徽章，可以免费住 4 天别墅：
+
+![achievements](./assets/achievements.png)
+
 ## 价格
 
 根据开源贡献计算折扣，采用 GitHub Starstruck（星光璀璨）徽章等级（比如上图的用户徽章为 Starstruck x 2），欢迎在 [issue](https://github.com/1024house/1024house/issues/3) 共创探讨。
