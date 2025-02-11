@@ -21,6 +21,7 @@ body:
     id: gender
     attributes:
       label: 性别
+      description: 非单间请选性别
       options:
         - ♂
         - ♀

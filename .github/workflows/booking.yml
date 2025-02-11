@@ -1,19 +1,50 @@
-name: Bed Booking submission
+name: Booking submission
 on:
   issues:
     types:
       - labeled
+      - edited
 jobs:
   Parse-and-Submit:
-    if: github.event.label.name == 'booking' && github.event.label.name == 'bed'
+    if: contains(github.event.issue.labels.*.name, 'booking')
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set Bed type
+        if: contains(github.event.issue.labels.*.name, 'bed')
+        run: echo "BOOKING_TYPE=bed" >> $GITHUB_ENV
+
+      - name: Set Room type
+        if: contains(github.event.issue.labels.*.name, 'room')
+        run: echo "BOOKING_TYPE=room" >> $GITHUB_ENV
 
       - id: issue-parser
         uses: stefanbuck/github-issue-parser@v3
         with:
-          template-path: ".github/ISSUE_TEMPLATE/bed_booking.yml"
+          template-path: ".github/ISSUE_TEMPLATE/${{ env.BOOKING_TYPE }}-booking.yml"
+
+      - name: Check availability
+        run: |
+          ITEM=${{ steps.issue-parser.outputs.issueparser_bookedItem }}
+          CURRENT_YEAR=$(date +%Y)
+          LAST_YEAR=$(($CURRENT_YEAR - 1))
+          TODAY=$(date +%Y-%m-%d)
+
+          TOTAL_AMOUNT=$(yq e ".[] | select(.name == \"$ITEM\") | .amount" data/${{ env.BOOKING_TYPE }}.yml)
+
+          CURRENT_YEAR_BOOKINGS=$(yq e "[.[] | select(.bookedItem == \"$ITEM\" and .startDate <= \"$TODAY\" and .endDate >= \"$TODAY\")] | length" data/booking-$CURRENT_YEAR.yml)
+          LAST_YEAR_BOOKINGS=$(yq e "[.[] | select(.bookedItem == \"$ITEM\" and .startDate <= \"$TODAY\" and .endDate >= \"$TODAY\")] | length" data/booking-$LAST_YEAR.yml)
+
+          TOTAL_BOOKINGS=$(($CURRENT_YEAR_BOOKINGS + $LAST_YEAR_BOOKINGS))
+
+          if [ $TOTAL_BOOKINGS -ge $TOTAL_AMOUNT ]; then
+            gh issue comment ${{ github.event.issue.number }} --body "当前没有可用的 $ITEM。"
+            exit 1
+          fi
 
       - name: Set issue title
         env:
@@ -21,13 +52,17 @@ jobs:
           ITEM: ${{ steps.issue-parser.outputs.issueparser_bookedItem }}
           DATE: ${{ steps.issue-parser.outputs.issueparser_startDate }}"
         run: |
-          TITLE="【订床】$USER - $ITEM - $DATE"
+          if [ "${{ env.BOOKING_TYPE }}" == "bed" ]; then
+            TITLE="【订床】$USER - $ITEM - $DATE"
+          else
+            TITLE="【订房】$USER - $ITEM - $DATE"
+          fi
           echo "ISSUE_TITLE=$TITLE" >> $GITHUB_ENV
           gh issue edit ${{ github.event.issue.number }} --title "$TITLE"
 
       - name: Add booking to YAML
         run: |
-          cat << EOF >> data/booking.yml
+          cat << EOF >> data/booking-$(date +%Y).yml
           - booker: "${{ github.event.issue.user.login }}"
             gender: "${{ steps.issue-parser.outputs.issueparser_gender }}"
             bookedItem: "${{ steps.issue-parser.outputs.issueparser_bookedItem }}"
@@ -58,7 +93,7 @@ jobs:
           ISSUE: ${{ github.event.issue.number }}
           ITEM: ${{ steps.issue-parser.outputs.issueparser_bookedItem }}
         run: |
-          PRICE_ARRAY=($(yq e 'select(.name == "$ITEM") | .price[]' data/bed.yml))
+          PRICE_ARRAY=($(yq e 'select(.name == "$ITEM") | .price[]' data/${{ env.BOOKING_TYPE }}.yml))
           INDEX=$STARSTRUCK
 
           if [ $STARSTRUCK -ge ${#PRICE_ARRAY[@]} ]; then

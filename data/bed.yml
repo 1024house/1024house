@@ -1,6 +1,6 @@
 CE:
   name: 准单人间 90 厘米床
-  bookable: false
+  amount: 0
   prices:
     - weekly:
         currency: CNY ￥
@@ -23,7 +23,7 @@ CE:
         amount: 24
 EE:
   name: 双床标间的一个 1.2 米床
-  bookable: true
+  amount: 1
   prices:
     - weekly:
         currency: CNY ￥
@@ -46,7 +46,7 @@ EE:
         amount: 30
 Premium:
   name: 准单人间 1.2 米床
-  bookable: true
+  amount: 1
   prices:
     - weekly:
         currency: CNY ￥
@@ -69,7 +69,7 @@ Premium:
         amount: 35
 Ultimate:
   name: 准单人间 1.8 米床
-  bookable: true
+  amount: 1
   prices:
     - weekly:
         currency: CNY ￥

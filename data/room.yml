@@ -1,6 +1,6 @@
 EE:
   name: 双床标间（1.2 米床）
-  bookable: true
+  amount: 1
   prices: # 数组下标为所需 Starstruck 数量
     - weekly:
         currency: CNY ￥
@@ -23,7 +23,7 @@ EE:
         amount: 54
 Max:
   name: 大床房（无暖气）
-  bookable: false
+  amount: 0
   prices:
     - weekly:
         currency: CNY ￥
