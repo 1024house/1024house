@@ -2,24 +2,20 @@ CE:
   name: 准单人间 90 厘米床
   bookable: false
   prices:
-    user:
-      weekly:
+    - weekly:
         currency: CNY ￥
         amount: 320
       monthly:
         currency: CNY ￥
         amount: 960
         discount: 0.25
-    starStruck1:
-      monthly:
+    - monthly:
         currency: CNY ￥
         amount: 800
-    starStruck2:
-      monthly:
+    - monthly:
         currency: CNY ￥
         amount: 768
-    starStruck3:
-      monthly:
+    - monthly:
         currency: CNY ￥
         amount: 720
       daily:
@@ -29,24 +25,20 @@ EE:
   name: 双床标间的一个 1.2 米床
   bookable: true
   prices:
-    user:
-      weekly:
+    - weekly:
         currency: CNY ￥
         amount: 440
       monthly:
         currency: CNY ￥
         amount: 1280
         discount: 0.27
-    starStruck1:
-      monthly:
+    - monthly:
         currency: CNY ￥
         amount: 1024
-    starStruck2:
-      monthly:
+    - monthly:
         currency: CNY ￥
         amount: 960
-    starStruck3:
-      monthly:
+    - monthly:
         currency: CNY ￥
         amount: 900
       daily:
@@ -56,24 +48,20 @@ Premium:
   name: 准单人间 1.2 米床
   bookable: true
   prices:
-    user:
-      weekly:
+    - weekly:
         currency: CNY ￥
         amount: 512
       monthly:
         currency: CNY ￥
         amount: 1536
         discount: 0.25
-    starStruck1:
-      monthly:
+    - monthly:
         currency: CNY ￥
         amount: 1440
-    starStruck2:
-      monthly:
+    - monthly:
         currency: CNY ￥
         amount: 1280
-    starStruck3:
-      monthly:
+    - monthly:
         currency: CNY ￥
         amount: 1024
       daily:
@@ -83,24 +71,20 @@ Ultimate:
   name: 准单人间 1.8 米床
   bookable: true
   prices:
-    user:
-      weekly:
+    - weekly:
         currency: CNY ￥
         amount: 768
       monthly:
         currency: CNY ￥
         amount: 2160
         discount: 0.29
-    starStruck1:
-      monthly:
+    - monthly:
         currency: CNY ￥
         amount: 1920
-    starStruck2:
-      monthly:
+    - monthly:
         currency: CNY ￥
         amount: 1800
-    starStruck3:
-      monthly:
+    - monthly:
         currency: CNY ￥
         amount: 1600
       daily:

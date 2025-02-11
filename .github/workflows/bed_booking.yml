@@ -40,3 +40,39 @@ jobs:
         with:
           title: ${{ env.ISSUE_TITLE }}
           body: "resolve #${{ github.event.issue.number }}"
+
+      - name: Query GitHub achievements
+        id: achievements
+        env:
+          USER: ${{ github.event.issue.user.login }}
+        run: |
+          ACHIEVEMENTS=$(gh api graphql -f query='{ user(login: "$USER") { achievements { totalCount } } }' -q '.data.user.achievements.totalCount')
+
+          STARSTRUCK=$(gh api graphql -f query='{ user(login: "$USER") { achievementHighlights { starstruck { totalCount } } } }' -q '.data.user.achievementHighlights.starstruck.totalCount')
+
+          echo "ACHIEVEMENTS=$ACHIEVEMENTS" >> $GITHUB_ENV
+          echo "STARSTRUCK=$STARSTRUCK" >> $GITHUB_ENV
+
+      - name: Comment on the issue
+        env:
+          ISSUE: ${{ github.event.issue.number }}
+          ITEM: ${{ steps.issue-parser.outputs.issueparser_bookedItem }}
+        run: |
+          PRICE_ARRAY=($(yq e 'select(.name == "$ITEM") | .price[]' data/bed.yml))
+          INDEX=$STARSTRUCK
+
+          if [ $STARSTRUCK -ge ${#PRICE_ARRAY[@]} ]; then
+            INDEX=$((${#PRICE_ARRAY[@]} - 1))
+          fi
+          DISCOUNTED_PRICE=${PRICE_ARRAY[$INDEX]}
+
+          COMMENT=$(cat <<EOF
+          根据您当前的 GitHub 成就数据，您将可享受 Starstruck $INDEX 级定价：
+
+          ```yml
+          $DISCOUNTED_PRICE
+          ```
+          同时，您可用 $ACHIEVEMENTS 个成就兑换 $ACHIEVEMENTS 天免费住宿。
+          EOF)
+
+          gh issue comment $ISSUE --body "$COMMENT"
