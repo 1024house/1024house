@@ -6,7 +6,7 @@ labels:
   - room
 body:
   - type: dropdown
-    id: room_type
+    id: bookedItem
     attributes:
       label: 房间类型
       options:
@@ -16,7 +16,7 @@ body:
       required: true
 
   - type: input
-    id: start_date
+    id: startDate
     attributes:
       label: 开始日期
       placeholder: 2025-01-01
@@ -24,7 +24,7 @@ body:
       required: true
 
   - type: input
-    id: end_date
+    id: endDate
     attributes:
       label: 结束日期
       placeholder: 2025-01-07
@@ -32,7 +32,7 @@ body:
       required: true
 
   - type: textarea
-    id: additional_info
+    id: remark
     attributes:
       label: 其他信息
       placeholder: 如果您有其它要求或信息，请在此填写

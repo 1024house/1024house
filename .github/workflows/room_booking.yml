@@ -1,0 +1,41 @@
+name: Room Booking submission
+on:
+  issues:
+    types:
+      - labeled
+jobs:
+  Parse-and-Submit:
+    if: github.event.label.name == 'booking' && github.event.label.name == 'room'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: issue-parser
+        uses: stefanbuck/github-issue-parser@v3
+        with:
+          template-path: ".github/ISSUE_TEMPLATE/room_booking.yml"
+
+      - name: Set issue title
+        env:
+          USER: ${{ github.event.issue.user.login }}
+          ITEM: ${{ steps.issue-parser.outputs.issueparser_bookedItem }}
+          DATE: ${{ steps.issue-parser.outputs.issueparser_startDate }}"
+        run: |
+          TITLE="【订房】$USER - $ITEM - $DATE"
+          echo "ISSUE_TITLE=$TITLE" >> $GITHUB_ENV
+          gh issue edit ${{ github.event.issue.number }} --title "$TITLE"
+
+      - name: Add booking to YAML
+        run: |
+          cat << EOF >> data/room_booking.yml
+          - booker: "${{ github.event.issue.user.login }}"
+            bookedItem: "${{ steps.issue-parser.outputs.issueparser_bookedItem }}"
+            startDate: "${{ steps.issue-parser.outputs.issueparser_startDate }}"
+            endDate: "${{ steps.issue-parser.outputs.issueparser_endDate }}"
+            remark: "${{ steps.issue-parser.outputs.issueparser_remark }}"
+          EOF
+
+      - uses: peter-evans/create-pull-request@v6
+        with:
+          title: ${{ env.ISSUE_TITLE }}
+          body: "resolve #${{ github.event.issue.number }}"
