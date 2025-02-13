@@ -76,17 +76,27 @@ jobs:
           title: ${{ env.ISSUE_TITLE }}
           body: "resolve #${{ github.event.issue.number }}"
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: apt install jq
+
       - name: Query GitHub achievements
         id: achievements
         env:
           USER: ${{ github.event.issue.user.login }}
         run: |
-          ACHIEVEMENTS=$(gh api graphql -f query='{ user(login: "$USER") { achievements { totalCount } } }' -q '.data.user.achievements.totalCount')
+          ACHIEVEMENT_LIST=$(curl -s https://github.com/$USER?tab=achievements | \
+            pnpx hred ".achievement-card { h3 ...{ @.textContent => name }, .achievement-tier-label ...{ @.textContent => count } }")
 
-          STARSTRUCK=$(gh api graphql -f query='{ user(login: "$USER") { achievementHighlights { starstruck { totalCount } } } }' -q '.data.user.achievementHighlights.starstruck.totalCount')
+          ACHIEVEMENTS=$(echo $ACHIEVEMENT_LIST | \
+            jq '[.[] | {count: (.count // "x1") | ltrimstr("x") | tonumber}] | map(.count) | add')
+          STARSTRUCKS=$(echo $ACHIEVEMENT_LIST | \
+            jq '[.[] | select(.name == "Starstruck") | {count: (.count // "x1") | ltrimstr("x") | tonumber}] | map(.count) | add')
 
           echo "ACHIEVEMENTS=$ACHIEVEMENTS" >> $GITHUB_ENV
-          echo "STARSTRUCK=$STARSTRUCK" >> $GITHUB_ENV
+          echo "STARSTRUCKS=$STARSTRUCKS" >> $GITHUB_ENV
 
       - name: Comment on the issue
         env:
@@ -94,9 +104,9 @@ jobs:
           ITEM: ${{ steps.issue-parser.outputs.issueparser_bookedItem }}
         run: |
           PRICE_ARRAY=($(yq e 'select(.name == "$ITEM") | .price[]' data/${{ env.BOOKING_TYPE }}.yml))
-          INDEX=$STARSTRUCK
+          INDEX=$STARSTRUCKS
 
-          if [ $STARSTRUCK -ge ${#PRICE_ARRAY[@]} ]; then
+          if [ $STARSTRUCKS -ge ${#PRICE_ARRAY[@]} ]; then
             INDEX=$((${#PRICE_ARRAY[@]} - 1))
           fi
           DISCOUNTED_PRICE=${PRICE_ARRAY[$INDEX]}
