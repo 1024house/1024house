@@ -13,9 +13,16 @@
             font-family: Arial, sans-serif;
         }
 
+        ul {
+            list-style: none;
+        }
+
         .container {
-            position: relative;
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            /* 或者使用 space-around, space-evenly 根据需要调整间距 */
+            align-items: center;
+            /* 垂直居中对齐 */
         }
 
         .container img {
@@ -23,11 +30,38 @@
             height: auto;
         }
 
-        .book-button {
+        ul.buttons {
             position: absolute;
-            top: 50%;
+            top: 60%;
             left: 50%;
             transform: translate(-50%, -50%);
+            display: flex;
+            gap: 10px;
+            /* 按钮之间的间距 */
+        }
+
+        @media (max-width: 768px) {
+            ul.buttons {
+                top: 20%;
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+
+            ul.buttons li {
+                display: inline-block;
+            }
+
+            .carousel {
+                height: 500px !important;
+            }
+
+            .carousel-image {
+                height: 500px !important;
+            }
+        }
+
+        .book-button {
             padding: 10px 20px;
             background-color: #25292e;
             color: #fff;
@@ -36,6 +70,7 @@
             border-radius: 5px;
             display: flex;
             align-items: center;
+            margin-right: 10px;
         }
 
         .book-button:hover {
@@ -46,11 +81,16 @@
             margin-right: 5px;
         }
 
+        .book-button img {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+
         .carousel {
             position: relative;
             width: 100%;
-            height: 600px;
-            /* 设置轮播容器的高度 */
+            height: 1080px;
             overflow: hidden;
         }
 
@@ -74,6 +114,7 @@
             text-align: center;
             padding: 10px 0;
         }
+
         footer a {
             color: #fff;
         }
@@ -83,15 +124,39 @@
 <body>
     <div class="container">
         <img src="./MiHouse/assets/poster.jpg" alt="1024House海报">
-        <a href="https://github.com/1024house/1024house" class="book-button">
-            <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 16 16" width="20" aria-hidden="true"
-                class="d-block">
-                <path fill="currentColor"
-                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
-                </path>
-            </svg>
-            <span>开源贡献免费住</span>
-        </a>
+        <ul class="buttons">
+            <li>
+                <a href="https://github.com/1024house/1024house" class="book-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 16 16" width="20"
+                        aria-hidden="true" class="d-block">
+                        <path fill="currentColor"
+                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+                        </path>
+                    </svg>
+                    <span>开源贡献免费住</span>
+                </a>
+            </li>
+            <ul>
+                <li>
+                    <button id="toggleButton" class="book-button">许愿池</button>
+                    <div id="linksContainer" style="display: none;">
+                        <a href="https://github.com/1024house/ideas/issues" class="book-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 16 16" width="20"
+                                aria-hidden="true" class="d-block">
+                                <path fill="currentColor"
+                                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+                                </path>
+                            </svg>
+                            <span>国外</span>
+                        </a>
+                        <a href="https://cnb.cool/1024house/ideas/-/issues" class="book-button">
+                            <img src="https://cnb.cool/images/favicon.png" />
+                            <span>国内</span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </ul>
     </div>
 
     <div class="carousel">
@@ -122,6 +187,15 @@
 
         // 设置定时器，每隔3秒切换到下一张图片
         setInterval(showNextImage, 3000);
+
+        document.getElementById('toggleButton').addEventListener('click', function () {
+            var container = document.getElementById('linksContainer');
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+            } else {
+                container.style.display = 'none';
+            }
+        });
     </script>
 </body>
 
