@@ -1,0 +1,92 @@
+CE:
+  name: 准单人间 90 厘米床
+  amount: 0
+  prices:
+    - weekly:
+        currency: CNY ￥
+        amount: 320
+      monthly:
+        currency: CNY ￥
+        amount: 960
+        discount: 0.25
+    - monthly:
+        currency: CNY ￥
+        amount: 800
+    - monthly:
+        currency: CNY ￥
+        amount: 768
+    - monthly:
+        currency: CNY ￥
+        amount: 720
+      daily:
+        currency: CNY ￥
+        amount: 24
+EE:
+  name: 双床标间的一个 1.2 米床
+  amount: 1
+  prices:
+    - weekly:
+        currency: CNY ￥
+        amount: 440
+      monthly:
+        currency: CNY ￥
+        amount: 1280
+        discount: 0.27
+    - monthly:
+        currency: CNY ￥
+        amount: 1024
+    - monthly:
+        currency: CNY ￥
+        amount: 960
+    - monthly:
+        currency: CNY ￥
+        amount: 900
+      daily:
+        currency: CNY ￥
+        amount: 30
+Premium:
+  name: 准单人间 1.2 米床
+  amount: 1
+  prices:
+    - weekly:
+        currency: CNY ￥
+        amount: 512
+      monthly:
+        currency: CNY ￥
+        amount: 1536
+        discount: 0.25
+    - monthly:
+        currency: CNY ￥
+        amount: 1440
+    - monthly:
+        currency: CNY ￥
+        amount: 1280
+    - monthly:
+        currency: CNY ￥
+        amount: 1024
+      daily:
+        currency: CNY ￥
+        amount: 35
+Ultimate:
+  name: 准单人间 1.8 米床
+  amount: 1
+  prices:
+    - weekly:
+        currency: CNY ￥
+        amount: 768
+      monthly:
+        currency: CNY ￥
+        amount: 2160
+        discount: 0.29
+    - monthly:
+        currency: CNY ￥
+        amount: 1920
+    - monthly:
+        currency: CNY ￥
+        amount: 1800
+    - monthly:
+        currency: CNY ￥
+        amount: 1600
+      daily:
+        currency: CNY ￥
+        amount: 54
