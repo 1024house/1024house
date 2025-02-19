@@ -163,6 +163,9 @@
       url.searchParams.set('username', username);
       window.history.pushState({}, '', url);
 
+      // 更新页面标题
+      document.title = `${username} 的 GitHub 成就住宿奖励`;
+
       // 显示 loading 状态
       document.getElementById('result').classList.remove('hidden');
       document.getElementById('resultContent').classList.add('hidden');
@@ -191,6 +194,8 @@
         console.log(error);
         document.getElementById('result').classList.add('hidden');
         document.getElementById('error').classList.remove('hidden');
+        // 发生错误时恢复默认标题
+        document.title = 'GitHub 免费住宿计划';
       }
     }
   </script>
