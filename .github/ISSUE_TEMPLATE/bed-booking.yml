@@ -1,0 +1,50 @@
+name: 床位预定
+description: GitHub 用户本人预定
+title: 【订床】
+labels:
+  - booking
+  - bed
+body:
+  - type: dropdown
+    id: bookedItem
+    attributes:
+      label: 床位类型
+      options:
+        - 准单人间 90 厘米床
+        - 双床标间的一个 1.2 米床
+        - 准单人间 1.2 米床
+        - 准单人间 1.8 米床
+    validations:
+      required: true
+
+  - type: dropdown
+    id: gender
+    attributes:
+      label: 性别
+      description: 非单间请选性别
+      options:
+        - ♂
+        - ♀
+        - ⚧
+
+  - type: input
+    id: startDate
+    attributes:
+      label: 开始日期
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+
+  - type: input
+    id: endDate
+    attributes:
+      label: 结束日期
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+
+  - type: textarea
+    id: remark
+    attributes:
+      label: 其他信息
+      placeholder: 如果您有其它要求或信息，请在此填写

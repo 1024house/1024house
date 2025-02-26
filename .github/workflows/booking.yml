@@ -1,0 +1,126 @@
+name: Booking submission
+on:
+  issues:
+    types:
+      - labeled
+      - edited
+jobs:
+  Parse-and-Submit:
+    if: contains(github.event.issue.labels.*.name, 'booking')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up YQ
+        run: |
+          wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
+          chmod +x /usr/bin/yq
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Set Bed type
+        if: contains(github.event.issue.labels.*.name, 'bed')
+        run: echo "BOOKING_TYPE=bed" >> $GITHUB_ENV
+
+      - name: Set Room type
+        if: contains(github.event.issue.labels.*.name, 'room')
+        run: echo "BOOKING_TYPE=room" >> $GITHUB_ENV
+
+      - id: issue-parser
+        uses: stefanbuck/github-issue-parser@v3
+        with:
+          template-path: ".github/ISSUE_TEMPLATE/${{ env.BOOKING_TYPE }}-booking.yml"
+
+      - name: Check availability
+        run: |
+          ITEM=${{ steps.issue-parser.outputs.issueparser_bookedItem }}
+          CURRENT_YEAR=$(date +%Y)
+          LAST_YEAR=$(($CURRENT_YEAR - 1))
+          TODAY=$(date +%Y-%m-%d)
+
+          TOTAL_AMOUNT=$(yq e ".[] | select(.name == \"$ITEM\") | .amount" data/${{ env.BOOKING_TYPE }}.yml)
+
+          CURRENT_YEAR_BOOKINGS=$(yq e "[.[] | select(.bookedItem == \"$ITEM\" and .startDate <= \"$TODAY\" and .endDate >= \"$TODAY\")] | length" data/booking-$CURRENT_YEAR.yml)
+          LAST_YEAR_BOOKINGS=$(yq e "[.[] | select(.bookedItem == \"$ITEM\" and .startDate <= \"$TODAY\" and .endDate >= \"$TODAY\")] | length" data/booking-$LAST_YEAR.yml)
+
+          TOTAL_BOOKINGS=$(($CURRENT_YEAR_BOOKINGS + $LAST_YEAR_BOOKINGS))
+
+          if [ $TOTAL_BOOKINGS -ge $TOTAL_AMOUNT ]; then
+            gh issue comment ${{ github.event.issue.number }} --body "当前没有可用的 $ITEM。"
+            exit 1
+          fi
+
+      - name: Set issue title
+        env:
+          USER: ${{ github.event.issue.user.login }}
+          ITEM: ${{ steps.issue-parser.outputs.issueparser_bookedItem }}
+          DATE: ${{ steps.issue-parser.outputs.issueparser_startDate }}"
+        run: |
+          if [ "${{ env.BOOKING_TYPE }}" == "bed" ]; then
+            TITLE="【订床】$USER - $ITEM - $DATE"
+          else
+            TITLE="【订房】$USER - $ITEM - $DATE"
+          fi
+          echo "ISSUE_TITLE=$TITLE" >> $GITHUB_ENV
+          gh issue edit ${{ github.event.issue.number }} --title "$TITLE"
+
+      - name: Add booking to YAML
+        run: |
+          cat << EOF >> data/booking-$(date +%Y).yml
+          - booker: "${{ github.event.issue.user.login }}"
+            gender: "${{ steps.issue-parser.outputs.issueparser_gender }}"
+            bookedItem: "${{ steps.issue-parser.outputs.issueparser_bookedItem }}"
+            startDate: "${{ steps.issue-parser.outputs.issueparser_startDate }}"
+            endDate: "${{ steps.issue-parser.outputs.issueparser_endDate }}"
+            remark: "${{ steps.issue-parser.outputs.issueparser_remark }}"
+          EOF
+
+      - uses: peter-evans/create-pull-request@v6
+        with:
+          title: ${{ env.ISSUE_TITLE }}
+          body: "resolve #${{ github.event.issue.number }}"
+
+      - name: Query GitHub achievements
+        id: achievements
+        env:
+          USER: ${{ github.event.issue.user.login }}
+        run: |
+          ACHIEVEMENT_LIST=$(curl -s https://github.com/$USER?tab=achievements | \
+            npx hred ".achievement-card { h3 ...{ @.textContent => name }, .achievement-tier-label ...{ @.textContent => count } }")
+
+          ACHIEVEMENTS=$(echo $ACHIEVEMENT_LIST | \
+            jq '[.[] | {count: (.count // "x1") | ltrimstr("x") | tonumber}] | map(.count) | add')
+          STARSTRUCKS=$(echo $ACHIEVEMENT_LIST | \
+            jq '[.[] | select(.name == "Starstruck") | {count: (.count // "x1") | ltrimstr("x") | tonumber}] | map(.count) | add')
+
+          echo "ACHIEVEMENTS=$ACHIEVEMENTS" >> $GITHUB_ENV
+          echo "STARSTRUCKS=$STARSTRUCKS" >> $GITHUB_ENV
+
+      - name: Comment on the issue
+        env:
+          ISSUE: ${{ github.event.issue.number }}
+          ITEM: ${{ steps.issue-parser.outputs.issueparser_bookedItem }}
+        run: |
+          PRICE_ARRAY=($(yq e 'select(.name == "$ITEM") | .price[]' data/${{ env.BOOKING_TYPE }}.yml))
+          INDEX=$STARSTRUCKS
+
+          if [ $STARSTRUCKS -ge ${#PRICE_ARRAY[@]} ]; then
+            INDEX=$((${#PRICE_ARRAY[@]} - 1))
+          fi
+          DISCOUNTED_PRICE=${PRICE_ARRAY[$INDEX]}
+
+          COMMENT=$(cat <<EOF
+          根据您当前的 GitHub 成就数据，您将可享受 Starstruck $INDEX 级定价：
+
+          ```yml
+          $DISCOUNTED_PRICE
+          ```
+          同时，您可用 $ACHIEVEMENTS 个成就兑换 $ACHIEVEMENTS 天免费住宿。
+          EOF)
+
+          gh issue comment $ISSUE --body "$COMMENT"

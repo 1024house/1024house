@@ -1,0 +1,38 @@
+name: 房间预定
+description: GitHub 用户本人预定
+title: 【订房】
+labels: 
+  - booking
+  - room
+body:
+  - type: dropdown
+    id: bookedItem
+    attributes:
+      label: 房间类型
+      options:
+        - 双床标间（1.2 米床）
+        - 大床房（无暖气）
+    validations:
+      required: true
+
+  - type: input
+    id: startDate
+    attributes:
+      label: 开始日期
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+
+  - type: input
+    id: endDate
+    attributes:
+      label: 结束日期
+      placeholder: YYYY-MM-DD
+    validations:
+      required: true
+
+  - type: textarea
+    id: remark
+    attributes:
+      label: 其他信息
+      placeholder: 如果您有其它要求或信息，请在此填写
