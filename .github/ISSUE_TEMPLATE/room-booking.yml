@@ -19,7 +19,7 @@ body:
     id: startDate
     attributes:
       label: 开始日期
-      placeholder: 2025-01-01
+      placeholder: YYYY-MM-DD
     validations:
       required: true
 
@@ -27,7 +27,7 @@ body:
     id: endDate
     attributes:
       label: 结束日期
-      placeholder: 2025-01-07
+      placeholder: YYYY-MM-DD
     validations:
       required: true
 

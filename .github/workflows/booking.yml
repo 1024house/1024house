@@ -14,6 +14,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up YQ
+        run: |
+          wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
+          chmod +x /usr/bin/yq
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
       - name: Set Bed type
         if: contains(github.event.issue.labels.*.name, 'bed')
         run: echo "BOOKING_TYPE=bed" >> $GITHUB_ENV
@@ -76,19 +85,13 @@ jobs:
           title: ${{ env.ISSUE_TITLE }}
           body: "resolve #${{ github.event.issue.number }}"
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - run: apt install jq
-
       - name: Query GitHub achievements
         id: achievements
         env:
           USER: ${{ github.event.issue.user.login }}
         run: |
           ACHIEVEMENT_LIST=$(curl -s https://github.com/$USER?tab=achievements | \
-            pnpx hred ".achievement-card { h3 ...{ @.textContent => name }, .achievement-tier-label ...{ @.textContent => count } }")
+            npx hred ".achievement-card { h3 ...{ @.textContent => name }, .achievement-tier-label ...{ @.textContent => count } }")
 
           ACHIEVEMENTS=$(echo $ACHIEVEMENT_LIST | \
             jq '[.[] | {count: (.count // "x1") | ltrimstr("x") | tonumber}] | map(.count) | add')
