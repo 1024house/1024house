@@ -1,6 +1,6 @@
 # Windows XP PC
 
-XP 发布于 2001 年，最新版 XP SP3 发布于 2008 年，本文以 XP SP3 为准。
+XP 发布于 2001 年，寿命终止于 2014 年。最新版 XP SP3 发布于 2008 年，本文以 XP SP3 为准。
 
 XP 64 位版发布于 2005 年，但并不流行，所以本文以 32 位为准。
 
@@ -61,3 +61,4 @@ XP 支持的最高硬件：
 - [2001 年代表性产品_液晶显示器新闻-中关村在线](https://lcd.zol.com.cn/112/1122083.html)
 - [How to Install Windows XP on EVGA Z390 Dark](https://globetrotter.tech/blog/how-to-install-windows-xp-on-evga-z390-dark/)
 - [Windows XP on ASUS Z390](https://community.hwbot.org/topic/192682-windows-xp-on-asus-z390-motherboards-and-others/)
+- [Windows XP 生命周期](https://learn.microsoft.com/zh-cn/lifecycle/products/windows-xp)
