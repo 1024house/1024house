@@ -1,8 +1,8 @@
-# Windows 10 PC
+# Windows 11 PC
 
-Win11 发布于 2021 年，寿命终止于 2025 年 10 月，但 Windows 10 企业版 LTSC 2021 将支持到 2027年，Windows 10 IoT 企业版 LTSC 2021 将支持到 2032 年。最新版 Windows 10 企业版 LTSC 2021 发布于 2021 年，本文以它为准。
+Win11 发布于 2021 年。
 
-本博物馆的 Win10 硬件：
+本博物馆的 Win11 硬件：
 
 - [ ] CPU：AMD R7 9700X
 - [ ] 主板：
@@ -17,10 +17,8 @@ Win11 发布于 2021 年，寿命终止于 2025 年 10 月，但 Windows 10 企�
 
 参考资料：
 
-> 2014 年 8 月戴尔发布全球首款 21:9 曲面屏 U3415W
-
-> 2014 年 10 月 LG 确认将在 2014 德国 IFA 消费电子展上推出全球首款 21:9 曲面显示器
+> 2021 年 1 月，戴尔发布全球首款 40 英寸带鱼屏显示器 UltraSharp 40 (U4021QW)。这款显示器采用 5120x2160 分辨率，并配备了曲面 IPS 面板，提供更广阔的视野和沉浸式体验。
 
 - [Windows 11 家庭版和专业版的生命周期](https://learn.microsoft.com/zh-cn/lifecycle/products/windows-11-home-and-pro)
-- [Windows 10 企业版 LTSC 2021 支持的 AMD 处理器](https://learn.microsoft.com/zh-cn/windows-hardware/design/minimum/supported/windows-11-supported-amd-processors)
+- [Windows 11 支持的 AMD 处理器](https://learn.microsoft.com/zh-cn/windows-hardware/design/minimum/supported/windows-11-supported-amd-processors)
 - [Windows 11 支持的 Intel 处理器](https://learn.microsoft.com/zh-cn/windows-hardware/design/minimum/supported/windows-11-supported-intel-processors)
