@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World in 30 different languages</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+  <!-- and it's easy to individually load additional languages -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/matlab.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/pascal.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/fsharp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/lisp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ruby.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/coffeescript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/ada.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/delphi.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/x86asm.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/perl.min.js"></script>
+  <script src="https://unpkg.com/highlightjs-cobol/dist/cobol.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/dart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/kotlin.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/tcl.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/scala.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/haskell.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/r.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/swift.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/fortran.min.js"></script>
+  <style>
+    body {
+      background-color: #2e3440;
+      color: #d8dee9;
+      font-family: monospace;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #a3be8c;
+      text-align: center;
+    }
+
+    #canvas-container {
+      position: relative;
+      width: 210mm; /* 默认A4宽度 */
+      height: 297mm; /* 默认A4高度 */
+      border: 1px solid #81a1c1;
+      background-color: #1E2127;
+      overflow: hidden;
+      padding: 10px;
+      box-sizing: border-box;
+      margin: 0 auto;
+    }
+
+    /* 流式布局容器 */
+    .masonry {
+      column-count: auto;
+      column-width: 300px;
+      column-gap: 20px;
+    }
+
+    .language-box {
+      display: inline-block;
+      width: 100%;
+      margin-bottom: 20px;
+      padding-top: 10px;
+      border: 1px solid #a3be8c;
+      break-inside: avoid;
+      box-sizing: border-box;
+    }
+
+    .language-box h2 {
+      margin: 0;
+      padding-left: 1em;
+      color: #81a1c1;
+      font-size: 16px;
+    }
+
+    .language-box:hover {
+      border-color: #a3be8c;
+    }
+
+    .language-box .hljs {
+        background: none;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      margin: 5px 0 0 0;
+    }
+
+    .controls {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    button {
+      background-color: #4c566a;
+      color: #eceff4;
+      border: none;
+      padding: 10px 20px;
+      margin: 0 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #5e81ac;
+    }
+
+    select {
+      background-color: #4c566a;
+      color: #eceff4;
+      border: none;
+      padding: 10px 20px;
+      margin: 0 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    select:hover {
+      background-color: #5e81ac;
+    }
+
+    .size-controls {
+      margin: 10px 0;
+    }
+
+    .custom-size {
+      display: inline-block;
+    }
+
+    .custom-size input {
+      width: 60px;
+      background-color: #4c566a;
+      color: #eceff4;
+      border: none;
+      padding: 5px;
+      margin: 0 5px;
+      text-align: center;
+    }
+
+    /* 语言选择模态框样式 */
+    #language-selection-modal .modal-content {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    #language-selection-modal .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    #language-selection-modal .checkbox-container input {
+      margin-right: 8px;
+    }
+
+    #language-selection-modal .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    #language-selection-modal .select-all-container {
+      margin-right: 20px;
+    }
+
+    #language-selection-modal .modal-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #4c566a;
+    }
+    
+    /* 隐藏元素 */
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="controls">
+
+    <div class="size-controls">
+      <label for="paper-size" data-lang="paperSize">Paper Size 纸张尺寸:</label>
+      <select id="paper-size" onchange="changePageSize()">
+        <option value="210x148">A5 - (210 x 148 mm) | (2480 x 1748 px)</option>
+        <option value="297x210">A4 - (297 x 210 mm) | (3508 x 2480 px)</option>
+        <option value="420x297">A3 - (420 x 297 mm) | (4960 x 3508 px)</option>
+        <option value="594x420">A2 - (594 x 420 mm) | (7016 x 4960 px)</option>
+        <option value="841x594">A1 - (841 x 594 mm) | (9933 x 7016 px)</option>
+        <option value="148x210">A5 | (148 × 210 mm) | (1748 × 2480 px)</option>
+        <option value="210x297">A4 | (210 × 297 mm) | (2480 × 3508 px)</option>
+        <option value="297x420">A3 | (297 × 420 mm) | (3508 × 4960 px)</option>
+        <option value="420x594">A2 | (420 × 594 mm) | (4960 × 7016 px)</option>
+        <option value="594x841">A1 | (594 × 841 mm) | (7016 × 9933 px)</option>
+        <option value="custom" data-lang="custom">Custom 自定义</option>
+      </select>
+      
+      <div id="custom-size-inputs" class="custom-size">
+        <label data-lang="width" for="custom-width">Width 宽度: </label><input type="number" id="custom-width" min="100" value="210" onchange="onWidthChange()"> mm
+        <label data-lang="height" for="custom-height">Height 高度: </label><input type="number" id="custom-height" min="100" value="297" onchange="onHeightChange()"> mm
+      </div>
+    </div>
+    
+    <button onclick="shuffleLayout()" data-lang="shuffle">Shuffle 随机重排</button>
+    <button onclick="exportToSVG()" data-lang="export">Export 导出SVG</button>
+    <button onclick="toggleLanguageSelection()" data-lang="selectLanguage">Select Program Languages 选择编程语言</button>
+    <button onclick="toggleLanguage()" data-lang="toggleLanguage">EN/中</button>
+  </div>
+
+    <!-- 语言选择模态框 -->
+  <div id="language-selection-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background-color: #2e3440; padding: 20px; border-radius: 5px; max-width: 800px; width: 90%;">
+      <div class="modal-header">
+        <h2 style="color: #a3be8c; margin: 0;" data-lang="selectLanguagesToShow">Select Languages to Show 选择要显示的编程语言</h2>
+        <div class="select-all-container">
+          <input type="checkbox" id="select-all-checkbox" checked onchange="toggleSelectAll()">
+          <label style="color: #d8dee9; display: flex; align-items: center;" for="select-all-checkbox" data-lang="selectAll">Select All 全选</label>
+        </div>
+      </div>
+      <div id="language-checkboxes" class="modal-content"></div>
+      <div class="modal-actions">
+        <button onclick="applyLanguageSelection()" style="margin-right: 10px;" data-lang="apply">Apply 应用</button>
+        <button onclick="closeLanguageSelection()" data-lang="cancel">Cancel 取消</button>
+      </div>
+    </div>
+  </div>
+  
+  <div id="canvas-container">
+    <h1>Hello World in 30 different languages</h1>
+    <div class="masonry">
+    <!-- Ada -->
+    <div class="language-box" data-lang="ada">
+      <h2>Ada</h2>
+      <pre><code class="language-ada">BEGIN DISPLAY("HELLO WORLD!") END.</code></pre>
+    </div>
+
+    <!-- Algol -->
+    <div class="language-box" data-lang="algol">
+      <h2>Algol</h2>
+      <pre><code class="language-ada">BEGIN DISPLAY("HELLO WORLD!") END.</code></pre>
+    </div>
+
+    <!-- Assembly -->
+    <div class="language-box" data-lang="assembly">
+      <h2>Assembly</h2>
+      <pre><code class="language-x86asm">global _main
+extern _printf
+
+section .text
+_main:
+    push message
+    call _printf
+    add esp, 4
+    ret
+message:
+    db 'Hello, world!', 10, 0</code></pre>
+    </div>
+
+    <!-- C -->
+    <div class="language-box" data-lang="c">
+      <h2>C</h2>
+      <pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(void)
+{
+    puts("Hello, world!");
+}</code></pre>
+    </div>
+
+    <!-- C# -->
+    <div class="language-box" data-lang="csharp">
+      <h2>C#</h2>
+      <pre><code class="language-csharp">console.writeline("Hello, world!");</code></pre>
+    </div>
+
+    <!-- C++ -->
+    <div class="language-box" data-lang="cpp">
+      <h2>C++</h2>
+      <pre><code class="language-cpp">#include &lt;iostream&gt;
+
+int main()
+{
+    std::cout &lt;&lt; "Hello, world!";
+    return 0;
+}</code></pre>
+    </div>
+
+    <!-- Cobol -->
+    <div class="language-box" data-lang="cobol">
+      <h2>Cobol</h2>
+      <pre><code class="language-cobol">IDENTIFICATION DIVISION.
+PROGRAM-ID. hello-world.
+PROCEDURE DIVISION.
+    DISPLAY "Hello, world!".</code></pre>
+    </div>
+
+    <!-- CoffeeScript -->
+    <div class="language-box" data-lang="coffeescript">
+      <h2>CoffeeScript</h2>
+      <pre><code class="language-coffeescript">console.log 'Hello, world!'</code></pre>
+    </div>
+
+    <!-- Dart -->
+    <div class="language-box" data-lang="dart">
+      <h2>Dart</h2>
+      <pre><code class="language-dart">main() {
+  print('Hello World!');
+}</code></pre>
+    </div>
+
+    <!-- Delphi -->
+    <div class="language-box" data-lang="delphi">
+      <h2>Delphi</h2>
+      <pre><code class="language-delphi">program HelloWorld;
+
+begin
+  WriteLn('Hello, world!');
+end.</code></pre>
+    </div>
+
+    <!-- F# -->
+    <div class="language-box" data-lang="fsharp">
+      <h2>F#</h2>
+      <pre><code class="language-fsharp">printfn "Hello World"</code></pre>
+    </div>
+
+    <!-- Fortran -->
+    <div class="language-box" data-lang="fortran">
+      <h2>Fortran</h2>
+      <pre><code class="language-fortran">program helloworld
+    print *, "Hello world!"
+end program helloworld</code></pre>
+    </div>
+
+    <!-- Go -->
+    <div class="language-box" data-lang="go">
+      <h2>Go</h2>
+      <pre><code class="language-go">println("Hello, world!");</code></pre>
+    </div>
+
+    <!-- Haskell -->
+    <div class="language-box" data-lang="haskell">
+      <h2>Haskell</h2>
+      <pre><code class="language-haskell">module Main where
+
+main :: IO ()
+main = putStrLn "Hello, World!"</code></pre>
+    </div>
+
+    <!-- HTML -->
+    <div class="language-box" data-lang="html">
+      <h2>HTML</h2>
+      <pre><code class="language-html">&lt;p&gt;Hello world&lt;/p&gt;</code></pre>
+    </div>
+
+    <!-- Java -->
+    <div class="language-box" data-lang="java">
+      <h2>Java</h2>
+      <pre><code class="language-java">public class HelloWorld {
+    public static void main(String[] args) {
+        System out println("Hello, World!");
+    }
+}</code></pre>
+    </div>
+
+    <!-- JavaScript -->
+    <div class="language-box" data-lang="javascript">
+      <h2>JavaScript</h2>
+      <pre><code class="language-javascript">console.log('hello, world!')</code></pre>
+    </div>
+
+    <!-- Kotlin -->
+    <div class="language-box" data-lang="kotlin">
+      <h2>Kotlin</h2>
+      <pre><code class="language-kotlin">fun main(args: Array&lt;String&gt;) {
+  println("Hello World!")
+}</code></pre>
+    </div>
+
+    <!-- Lisp -->
+    <div class="language-box" data-lang="lisp">
+      <h2>Lisp</h2>
+      <pre><code class="language-lisp">(print "Hello world")</code></pre>
+    </div>
+
+    <!-- Matlab -->
+    <div class="language-box" data-lang="matlab">
+      <h2>Matlab</h2>
+      <pre><code class="language-matlab">disp('Hello, world!')</code></pre>
+    </div>
+
+    <!-- Pascal -->
+    <div class="language-box" data-lang="pascal">
+      <h2>Pascal</h2>
+      <pre><code class="language-pascal">Writeln('Hello, world!');</code></pre>
+    </div>
+
+    <!-- Perl -->
+    <div class="language-box" data-lang="perl">
+      <h2>Perl</h2>
+      <pre><code class="language-perl">print "Hello, world!\n";</code></pre>
+    </div>
+
+    <!-- PHP -->
+    <div class="language-box" data-lang="php">
+      <h2>PHP</h2>
+      <pre><code class="language-php">echo "hello world!";</code></pre>
+    </div>
+
+    <!-- Python -->
+    <div class="language-box" data-lang="python">
+      <h2>Python</h2>
+      <pre><code class="language-python">print('Hello, world!')</code></pre>
+    </div>
+
+    <!-- R -->
+    <div class="language-box" data-lang="r">
+      <h2>R</h2>
+      <pre><code class="language-r">cat("Hello world\n")</code></pre>
+    </div>
+
+    <!-- Ruby -->
+    <div class="language-box" data-lang="ruby">
+      <h2>Ruby</h2>
+      <pre><code class="language-ruby">puts "Hello World!"</code></pre>
+    </div>
+
+    <!-- Scala -->
+    <div class="language-box" data-lang="scala">
+      <h2>Scala</h2>
+      <pre><code class="language-scala">object HelloWorld extends App {
+  println("Hello, World!")
+}</code></pre>
+    </div>
+
+    <!-- Swift -->
+    <div class="language-box" data-lang="swift">
+      <h2>Swift</h2>
+      <pre><code class="language-swift">println("Hello, world!");</code></pre>
+    </div>
+
+    <!-- Tcl -->
+    <div class="language-box" data-lang="tcl">
+      <h2>Tcl</h2>
+      <pre><code class="language-tcl">puts "Hello World!"</code></pre>
+    </div>
+
+    <!-- TypeScript -->
+    <div class="language-box" data-lang="typescript">
+      <h2>TypeScript</h2>
+      <pre><code class="language-typescript">console.log('Hello, world!')</code></pre>
+    </div>
+    </div>
+  </div>
+
+  <script>
+    // 语言数据
+    const translations = {
+      'paperSize': {
+        'en': 'Paper Size',
+        'zh': '纸张尺寸'
+      },
+      'custom': {
+        'en': 'Custom',
+        'zh': '自定义'
+      },
+      'width': {
+        'en': 'Width:',
+        'zh': '宽度：'
+      },
+      'height': {
+        'en': 'Height:',
+        'zh': '高度：'
+      },
+      'shuffle': {
+        'en': 'Shuffle',
+        'zh': '随机重排'
+      },
+      'export': {
+        'en': 'Export SVG',
+        'zh': '导出 SVG'
+      },
+      'selectLanguage': {
+        'en': 'Select Program Languages',
+        'zh': '选择编程语言'
+      },
+      'toggleLanguage': {
+        'en': 'EN/中',
+        'zh': '中/EN'
+      },
+      'selectLanguagesToShow': {
+        'en': 'Select Program Languages to Show',
+        'zh': '选择要显示的编程语言'
+      },
+      'selectAll': {
+        'en': 'Select All',
+        'zh': '全选'
+      },
+      'apply': {
+        'en': 'Apply',
+        'zh': '应用'
+      },
+      'cancel': {
+        'en': 'Cancel',
+        'zh': '取消'
+      }
+    };
+    
+    // 获取浏览器语言，如果localStorage中有保存的语言设置则优先使用
+    let currentLanguage = localStorage.getItem('language') || (navigator.language.startsWith('zh') ? 'zh' : 'en');
+
+    let visibleCount = 30;
+    
+    // 初始化 highlight.js
+    hljs.highlightAll();
+    
+    // Fisher-Yates 洗牌算法
+    function shuffle(array) {
+      let currentIndex = array.length, randomIndex;
+
+      // 当仍有元素未洗牌时
+      while (currentIndex != 0) {
+        // 选择剩余元素
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // 交换
+        [array[currentIndex], array[randomIndex]] = [
+          array[randomIndex], array[currentIndex]];
+      }
+
+      return array;
+    }
+
+    // 随机重排
+    function shuffleLayout() {
+      const container = document.querySelector('.masonry');
+      const boxes = Array.from(container.children);
+      
+      // 打乱顺序
+      const shuffledBoxes = shuffle(boxes);
+      
+      // 清空容器
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
+      
+      // 重新添加元素
+      shuffledBoxes.forEach(box => {
+        container.appendChild(box);
+      });
+      
+      // 重新应用语法高亮
+      hljs.highlightAll();
+    }
+
+    // 重置为默认顺序
+    function resetLayout() {
+      const container = document.querySelector('.masonry');
+      const boxes = Array.from(container.children);
+      
+      // 按照 data-lang 属性排序以恢复默认顺序
+      boxes.sort((a, b) => {
+        const langA = a.getAttribute('data-lang');
+        const langB = b.getAttribute('data-lang');
+        return langA.localeCompare(langB);
+      });
+      
+      // 清空容器
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
+      
+      // 按照排序后的顺序重新添加元素
+      boxes.forEach(box => {
+        container.appendChild(box);
+      });
+      
+      // 重新应用语法高亮
+      hljs.highlightAll();
+    }
+    
+        // 更改页面尺寸
+    function changePageSize() {
+      const container = document.getElementById('canvas-container');
+      const sizeSelect = document.getElementById('paper-size');
+      const widthInput = document.getElementById('custom-width');
+      const heightInput = document.getElementById('custom-height');
+      
+      const size = sizeSelect.value;
+      
+      // 保存值到localStorage
+      localStorage.setItem('paperSize', size);
+      localStorage.setItem('customWidth', widthInput.value);
+      localStorage.setItem('customHeight', heightInput.value);
+      
+      // 处理自定义尺寸选项
+      if (size === 'custom') {
+        const width = widthInput.value;
+        const height = heightInput.value;
+        
+        container.style.width = width + 'mm';
+        container.style.height = height + 'mm';
+      } else if (size.includes('x')) {
+        // 解析预定义尺寸 (直接从value中获取)
+        const dimensions = size.split('x');
+        const width = dimensions[0];
+        const height = dimensions[1];
+        
+        // 更新输入框的值
+        widthInput.value = width;
+        heightInput.value = height;
+        
+        container.style.width = width + 'mm';
+        container.style.height = height + 'mm';
+      }
+    }
+    
+    // 当用户手动修改宽度输入框时
+    function onWidthChange() {
+      const sizeSelect = document.getElementById('paper-size');
+      const container = document.getElementById('canvas-container');
+      const widthInput = document.getElementById('custom-width');
+      const heightInput = document.getElementById('custom-height');
+      
+      sizeSelect.value = 'custom';
+      
+      // 保存值到localStorage
+      localStorage.setItem('paperSize', 'custom');
+      localStorage.setItem('customWidth', widthInput.value);
+      localStorage.setItem('customHeight', heightInput.value);
+      
+      // 直接应用自定义尺寸
+      const width = widthInput.value;
+      const height = heightInput.value;
+      
+      container.style.width = width + 'mm';
+      container.style.height = height + 'mm';
+    }
+    
+    // 当用户手动修改高度输入框时
+    function onHeightChange() {
+      const sizeSelect = document.getElementById('paper-size');
+      const container = document.getElementById('canvas-container');
+      const widthInput = document.getElementById('custom-width');
+      const heightInput = document.getElementById('custom-height');
+      
+      sizeSelect.value = 'custom';
+      
+      // 保存值到localStorage
+      localStorage.setItem('paperSize', 'custom');
+      localStorage.setItem('customWidth', widthInput.value);
+      localStorage.setItem('customHeight', heightInput.value);
+      
+      // 直接应用自定义尺寸
+      const width = widthInput.value;
+      const height = heightInput.value;
+      
+      container.style.width = width + 'mm';
+      container.style.height = height + 'mm';
+    }
+    
+    // 恢复保存的设置
+    function restoreSettings() {
+      const size = localStorage.getItem('paperSize') || '297x210';
+      const width = localStorage.getItem('customWidth') || '297';
+      const height = localStorage.getItem('customHeight') || '210';
+      
+      document.getElementById('paper-size').value = size;
+      document.getElementById('custom-width').value = width;
+      document.getElementById('custom-height').value = height;
+    }
+    
+    // 切换语言
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === 'en' ? 'zh' : 'en';
+      localStorage.setItem('language', currentLanguage);
+      updateLanguage();
+    }
+    
+    // 更新语言
+    function updateLanguage() {
+      // 更新按钮和标签文本
+      const elements = document.querySelectorAll('[data-lang]');
+      elements.forEach(element => {
+        const key = element.getAttribute('data-lang');
+        if (translations[key] && translations[key][currentLanguage]) {
+          if (element.tagName === 'INPUT') {
+            element.placeholder = translations[key][currentLanguage];
+          } else {
+            element.textContent = translations[key][currentLanguage];
+          }
+        }
+      });
+      
+      updateTitle();
+    }
+    
+    // 页面加载时随机排列并恢复设置
+    window.addEventListener('DOMContentLoaded', function() {
+      restoreSettings();
+      shuffleLayout();
+      // 在恢复设置后手动调用一次changePageSize来应用尺寸
+      changePageSize();
+      // 初始化语言选择
+      initLanguageSelection();
+      // 更新语言
+      updateLanguage();
+    });
+
+    // 初始化语言选择功能
+    function initLanguageSelection() {
+      const languageBoxes = document.querySelectorAll('.language-box');
+      const languageCheckboxes = document.getElementById('language-checkboxes');
+      
+      // 按照HTML中的原始顺序处理语言框
+      const orderedBoxes = Array.from(languageBoxes).sort((a, b) => {
+        const langA = a.getAttribute('data-lang');
+        const langB = b.getAttribute('data-lang');
+        return langA.localeCompare(langB);
+      });
+      
+      orderedBoxes.forEach(box => {
+        const lang = box.getAttribute('data-lang');
+        const langName = box.querySelector('h2').textContent;
+        
+        const label = document.createElement('label');
+        label.style.display = 'block';
+        label.style.marginBottom = '5px';
+        label.style.color = '#d8dee9';
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = lang;
+        checkbox.checked = true; // 默认全部选中
+        checkbox.style.marginRight = '10px';
+        
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(langName));
+        languageCheckboxes.appendChild(label);
+      });
+    }
+
+    // 全选/取消全选功能
+    function toggleSelectAll() {
+      const selectAllCheckbox = document.getElementById('select-all-checkbox');
+      const checkboxes = document.querySelectorAll('#language-checkboxes input[type="checkbox"]');
+      
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAllCheckbox.checked;
+      });
+    }
+
+    // 打开语言选择模态框
+    function toggleLanguageSelection() {
+      const modal = document.getElementById('language-selection-modal');
+      modal.style.display = 'flex';
+    }
+
+    // 关闭语言选择模态框
+    function closeLanguageSelection() {
+      const modal = document.getElementById('language-selection-modal');
+      modal.style.display = 'none';
+    }
+
+    // 应用语言选择
+    function applyLanguageSelection() {
+      const checkboxes = document.querySelectorAll('#language-checkboxes input[type="checkbox"]');
+      const languageBoxes = document.querySelectorAll('.language-box');
+      
+      // 隐藏所有语言框
+      languageBoxes.forEach(box => {
+        box.style.display = 'none';
+      });
+      
+      // 显示选中的语言框
+      visibleCount = 0;
+      checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+          const lang = checkbox.value;
+          const box = document.querySelector(`.language-box[data-lang="${lang}"]`);
+          if (box) {
+            box.style.display = 'inline-block';
+            visibleCount++;
+          }
+        }
+      });
+      
+      updateTitle();
+      
+      // 关闭模态框
+      closeLanguageSelection();
+      
+      // 重新应用语法高亮
+      hljs.highlightAll();
+    }
+
+    function updateTitle() {
+      // 更新标题中的语言数量
+      const titleElement = document.querySelector('h1');
+      let title = currentLanguage === 'en' ? 
+        `Hello World in ${visibleCount} different languages` :
+        `${visibleCount} 种不同编程语言的 Hello World`;
+      titleElement.textContent = title;
+      
+      // 同时更新页面标题
+      document.title = title;
+    }
+
+        // 导出为SVG
+    function exportToSVG() {
+      const container = document.getElementById('canvas-container');
+      
+      // 使用foreignObject在SVG中嵌入HTML
+      const svgNS = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(svgNS, "svg");
+      
+      // 设置SVG属性
+      const width = container.offsetWidth;
+      const height = container.offsetHeight;
+      svg.setAttribute("width", width);
+      svg.setAttribute("height", height);
+      svg.setAttribute("xmlns", svgNS);
+      svg.setAttribute("version", "1.1");
+      
+      // 创建foreignObject来包含HTML内容
+      const foreignObject = document.createElementNS(svgNS, "foreignObject");
+      foreignObject.setAttribute("width", "100%");
+      foreignObject.setAttribute("height", "100%");
+      
+      // 克隆容器内容
+      const clonedContainer = container.cloneNode(true);
+      
+      // 添加样式信息到克隆的容器
+      const style = document.createElement("style");
+      style.innerHTML = `
+        body {
+          background-color: #2e3440;
+          color: #d8dee9;
+          font-family: monospace;
+          padding: 20px;
+          margin: 0;
+        }
+        
+        h1 {
+          color: #a3be8c;
+          text-align: center;
+          margin-top: 0;
+        }
+
+        #canvas-container {
+          position: relative;
+          width: ${width}px;
+          height: ${height}px;
+          border: 1px solid #81a1c1;
+          background-color: #1E2127;
+          overflow: hidden;
+          padding: 10px;
+          box-sizing: border-box;
+          margin: 0 auto;
+        }
+
+        /* 流式布局容器 */
+        .masonry {
+          column-count: auto;
+          column-width: 300px;
+          column-gap: 20px;
+        }
+
+        .language-box {
+          display: inline-block;
+          width: 100%;
+          margin-bottom: 20px;
+          border: 1px solid #a3be8c;
+          padding: 5px;
+          break-inside: avoid;
+          box-sizing: border-box;
+        }
+
+        .language-box h2 {
+          margin: 0;
+          color: #81a1c1;
+          font-size: 16px;
+        }
+
+        pre {
+          white-space: pre-wrap;
+          margin: 5px 0 0 0;
+        }
+        
+        code {
+          font-family: monospace;
+        }
+        
+        .hljs {
+          display: block;
+          overflow-x: auto;
+          padding: 0.5em;
+          background: none;
+          color: #d8dee9;
+        }
+
+        .hljs-comment,
+        .hljs-quote {
+          color: #616e88;
+          font-style: italic;
+        }
+
+        .hljs-doctag,
+        .hljs-keyword,
+        .hljs-formula {
+          color: #81a1c1;
+        }
+
+        .hljs-section,
+        .hljs-name,
+        .hljs-selector-tag,
+        .hljs-deletion,
+        .hljs-subst {
+          color: #81a1c1;
+        }
+
+        .hljs-literal {
+          color: #8fbcbb;
+        }
+
+        .hljs-string,
+        .hljs-regexp,
+        .hljs-addition,
+        .hljs-attribute,
+        .hljs-meta-string {
+          color: #a3be8c;
+        }
+
+        .hljs-built_in,
+        .hljs-class .hljs-title {
+          color: #ebcb8b;
+        }
+
+        .hljs-attr,
+        .hljs-variable,
+        .hljs-template-variable,
+        .hljs-type,
+        .hljs-selector-class,
+        .hljs-selector-attr,
+        .hljs-selector-pseudo,
+        .hljs-number {
+          color: #b48ead;
+        }
+
+        .hljs-symbol,
+        .hljs-bullet,
+        .hljs-link,
+        .hljs-meta,
+        .hljs-selector-id,
+        .hljs-title {
+          color: #8fbcbb;
+        }
+
+        .hljs-emphasis {
+          font-style: italic;
+        }
+
+        .hljs-strong {
+          font-weight: bold;
+        }
+
+        .hljs-link {
+          text-decoration: underline;
+        }
+      `;
+      clonedContainer.insertBefore(style, clonedContainer.firstChild);
+      
+      // 将克隆的容器添加到foreignObject
+      foreignObject.appendChild(clonedContainer);
+      
+      // 将foreignObject添加到SVG
+      svg.appendChild(foreignObject);
+      
+      // 创建下载链接
+      const serializer = new XMLSerializer();
+      const svgString = serializer.serializeToString(svg);
+      const blob = new Blob([svgString], {type: "image/svg+xml"});
+      const url = URL.createObjectURL(blob);
+      
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "hello-world-collection.svg";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+
+</html>
