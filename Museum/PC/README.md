@@ -26,3 +26,4 @@
 ## 参考资料
 
 - [Intel CPU 酷睿 2-7 代的集成显卡对应表](https://www.intel.com/content/www/us/en/support/articles/000007772/graphics.html)
+- [Windows 7-11 的 Intel 显卡驱动](https://www.intel.com/content/www/us/en/support/articles/000090440/graphics.html)
