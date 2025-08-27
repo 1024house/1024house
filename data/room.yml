@@ -1,0 +1,46 @@
+EE:
+  name: 双床标间（1.2 米床）
+  amount: 1
+  prices: # 数组下标为所需 Starstruck 数量
+    - weekly:
+        currency: CNY ￥
+        amount: 800
+      monthly:
+        currency: CNY ￥
+        amount: 2160
+        discount: 0.32
+    - monthly:
+        currency: CNY ￥
+        amount: 1920
+    - monthly:
+        currency: CNY ￥
+        amount: 1800
+    - monthly:
+        currency: CNY ￥
+        amount: 1600
+      daily:
+        currency: CNY ￥
+        amount: 54
+Max:
+  name: 大床房（无暖气）
+  amount: 0
+  prices:
+    - weekly:
+        currency: CNY ￥
+        amount: 1024
+      monthly:
+        currency: CNY ￥
+        amount: 2560
+        discount: 0.37
+    - monthly:
+        currency: CNY ￥
+        amount: 2160
+    - monthly:
+        currency: CNY ￥
+        amount: 1920
+    - monthly:
+        currency: CNY ￥
+        amount: 1800
+      daily:
+        currency: CNY ￥
+        amount: 60
