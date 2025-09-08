@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub 免费住宿计划</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+  <div class="container mx-auto px-4 py-8">
+    <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
+      <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">
+        GitHub 成就住宿奖励
+      </h1>
+
+      <div class="mb-6">
+        <p class="text-gray-600 text-center mb-4">
+          输入您的 GitHub 用户名，查看可获得的免费住宿天数
+        </p>
+
+        <div class="flex gap-2">
+          <input type="text" id="username" placeholder="输入 GitHub 用户名"
+            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required>
+          <button onclick="checkAchievements()"
+            class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+            查询
+          </button>
+        </div>
+      </div>
+
+      <div id="result" class="min-h-[160px] border-t border-gray-200 flex flex-col justify-center items-center">
+        <div id="loading" class="hidden text-center p-4">
+          <div
+            class="animate-spin inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mb-2">
+          </div>
+          <p class="text-gray-600">正在查询成就...</p>
+        </div>
+
+        <div id="resultContent" class="text-center p-4">
+          <p class="text-gray-700 mb-2">您总共获得了：</p>
+          <p class="text-3xl font-bold text-blue-500 mb-2">
+            <span id="achievementCount" class="text-blue-500 font-bold">0</span> 个成就
+          </p>
+          <p class="text-green-600 font-semibold">
+            可兑换 <span id="freeDays" class="text-green-600 font-bold text-3xl">0</span> 天免费住宿！
+          </p>
+        </div>
+      </div>
+
+      <div id="error" class="hidden min-h-[160px] text-center p-4 border-t border-gray-200">
+        <p class="text-red-500">
+          未找到该用户或发生错误，请检查用户名是否正确
+        </p>
+      </div>
+
+      <!-- 添加勋章获取提示 -->
+      <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+        <h2 class="text-lg font-semibold text-gray-800 mb-2">如何获得更多勋章？</h2>
+        <div class="text-gray-600 text-sm space-y-3">
+          <div>
+            <p class="mb-1">
+              <span class="font-medium">Starstruck 勋章</span>：
+              创建的仓库获得 16 个星标
+            </p>
+          </div>
+
+          <div>
+            <p class="mb-1">
+              <span class="font-medium">Pullshark 勋章</span>：
+              在一个月内创建至少 2 个被合并的 Pull Request（需要在不同仓库）
+            </p>
+          </div>
+
+          <div>
+            <p class="mb-1">
+              <span class="font-medium">YOLO 勋章</span>：
+              无审查直接合并自己的 Pull Request
+            </p>
+          </div>
+
+          <div>
+            <p class="mb-1">
+              <span class="font-medium">Quickdraw 勋章</span>：
+              在 issue 创建后 5 分钟内关闭 issue
+            </p>
+          </div>
+
+          <div>
+            <p class="mb-1">
+              <span class="font-medium">Pair Extraordinaire 勋章</span>：
+              与他人共同完成一个合并的 Pull Request
+            </p>
+          </div>
+
+          <div>
+            <p class="mb-1">
+              <span class="font-medium">Galaxy Brain 勋章</span>：
+              在讨论中获得 2 个或更多的回答被采纳
+            </p>
+          </div>
+
+          <div>
+            <p class="mb-1">
+              <span class="font-medium">Public Sponsor 勋章</span>：
+              赞助任意开源贡献者或组织
+            </p>
+          </div>
+
+          <div>
+            <p class="mb-1">
+              <span class="font-medium">Arctic Code Vault 勋章</span>：
+              在 2020 GitHub Archive Program 中有代码贡献
+            </p>
+          </div>
+
+          <p class="text-xs text-gray-500 mt-3">
+            提示：积极参与开源项目、创建优质仓库并与社区互动是获得更多勋章的好方法！
+          </p>
+        </div>
+      </div>
+
+      <!-- 添加 Powered By 链接 -->
+      <div class="text-center mt-6 text-sm text-gray-500">
+        Powered By
+        <a href="https://github.com/1024house/1024house" target="_blank" rel="noopener noreferrer"
+          class="text-blue-500 hover:text-blue-600 hover:underline">
+          1024house
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 从 URL 获取用户名并自动查询
+    window.addEventListener('load', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const username = urlParams.get('username');
+      if (username) {
+        document.getElementById('username').value = username;
+        checkAchievements();
+      }
+
+      // 添加回车键监听
+      document.getElementById('username').addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+          checkAchievements();
+        }
+      });
+    });
+
+    async function checkAchievements() {
+      const username = document.getElementById('username').value.trim();
+      if (!username) {
+        alert('请输入 GitHub 用户名');
+        return;
+      }
+
+      // 更新 URL，方便分享
+      const url = new URL(window.location);
+      url.searchParams.set('username', username);
+      window.history.pushState({}, '', url);
+
+      // 更新页面标题
+      document.title = `${username} 的 GitHub 成就住宿奖励`;
+
+      // 显示 loading 状态
+      document.getElementById('result').classList.remove('hidden');
+      document.getElementById('resultContent').classList.add('hidden');
+      document.getElementById('loading').classList.remove('hidden');
+      document.getElementById('error').classList.add('hidden');
+
+      try {
+        // 使用 GitHub Achievements API
+        const response = await fetch(`https://github-achievements-api.wangrunlin.workers.dev/${username}`);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch achievements');
+        }
+
+        const data = await response.json();
+        const achievementCount = data.total.raw || 0;
+        const freeDays = achievementCount;
+
+        document.getElementById('achievementCount').textContent = achievementCount;
+        document.getElementById('freeDays').textContent = freeDays;
+
+        // 显示结果
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('resultContent').classList.remove('hidden');
+      } catch (error) {
+        console.log(error);
+        document.getElementById('result').classList.add('hidden');
+        document.getElementById('error').classList.remove('hidden');
+        // 发生错误时恢复默认标题
+        document.title = 'GitHub 免费住宿计划';
+      }
+    }
+  </script>
+</body>
+
+</html>
